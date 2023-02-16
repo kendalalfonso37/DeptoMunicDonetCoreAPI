@@ -1,0 +1,13 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DepartamentosMunicipiosAPI.DTOs
+{
+    public class DepartamentoCreationDTO
+    {
+        [Required]
+        public string Nombre { get; set; }
+        public string CNRDepartamento { get; set; }
+        public float Latitud { get; set; }
+        public float Longitud { get; set; }
+    }
+}
