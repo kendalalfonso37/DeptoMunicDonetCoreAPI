@@ -1,7 +1,12 @@
 ﻿using DepartamentosMunicipiosAPI.DatabaseContexts;
+using DepartamentosMunicipiosAPI.DTOs;
+using DepartamentosMunicipiosAPI.Entities;
 using DepartamentosMunicipiosAPI.Helpers;
+using DepartamentosMunicipiosAPI.Mappers;
+using DepartamentosMunicipiosAPI.Repositories;
 using DepartamentosMunicipiosAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 namespace DepartamentosMunicipiosAPI
@@ -34,6 +39,8 @@ namespace DepartamentosMunicipiosAPI
                 var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
                 return new UriServiceHelper(uri);
             });
+            // Add Repositories
+            services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,7 +51,7 @@ namespace DepartamentosMunicipiosAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Departamentos Municipios API");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Departamentos Municipios API V1");
                 });
 
                 app.UseHttpsRedirection();

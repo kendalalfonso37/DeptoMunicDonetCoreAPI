@@ -4,6 +4,8 @@ using DepartamentosMunicipiosAPI.DTOs;
 using DepartamentosMunicipiosAPI.Entities;
 using DepartamentosMunicipiosAPI.Filters;
 using DepartamentosMunicipiosAPI.Helpers;
+using DepartamentosMunicipiosAPI.Mappers;
+using DepartamentosMunicipiosAPI.Repositories;
 using DepartamentosMunicipiosAPI.Services;
 using DepartamentosMunicipiosAPI.Wrappers;
 using Microsoft.AspNetCore.Http;
@@ -17,15 +19,15 @@ namespace DepartamentosMunicipiosAPI.Controllers
     [ApiController]
     public class DepartamentoController : ControllerBase
     {
-        private readonly IMapper mapper;
-        private readonly ApplicationDbContext context;
-        private readonly IUriServiceHelper uriService;
+        private readonly DepartamentoMapper _mapper;
+        private readonly IDepartamentoRepository _repository;
+        private readonly IUriServiceHelper _uriService;
 
-        public DepartamentoController(ApplicationDbContext context, IMapper mapper, IUriServiceHelper uriService)
+        public DepartamentoController(IDepartamentoRepository repository, IMapper mapper, IUriServiceHelper uriService)
         {
-            this.mapper = mapper;
-            this.context = context;
-            this.uriService = uriService;
+            this._mapper = new DepartamentoMapper(mapper);
+            this._repository = repository;
+            this._uriService = uriService;
         }
 
         [HttpGet(Name = "getDepartamentos")]
@@ -34,32 +36,27 @@ namespace DepartamentosMunicipiosAPI.Controllers
             var route = Request.Path.Value;
             var validFilter = new PaginationFilter(paginationFilter.PageNumber, paginationFilter.PageSize);
 
-            var pagedData = await context.Departamentos.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-                .Take(validFilter.PageSize)
-                .ToListAsync();
+            var pagedData = await _repository.GetPagedList((validFilter.PageNumber - 1) * validFilter.PageSize, validFilter.PageSize);
 
-            var totalRecords = await context.Departamentos.CountAsync();
+            var totalRecords = await _repository.Count();
 
-            var dtos = mapper.Map<List<DepartamentoDTO>>(pagedData);
+            var dtos = _mapper.getListDTO(pagedData);
 
-            var pagedResponse = PaginationHelper.CreatePagedResponse(dtos, validFilter, totalRecords, uriService, route);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(dtos, validFilter, totalRecords, _uriService, route);
 
             return Ok(pagedResponse);
-
-            //var entidades = await context.Departamentos.ToListAsync();
-            //return mapper.Map<List<DepartamentoDTO>>(entidades);
         }
 
         [HttpGet("{id:}", Name = "getDepartamento")]
         public async Task<ActionResult<Response<DepartamentoDTO>>> Get(int id)
         {
-            var entidad = await context.Departamentos.FirstOrDefaultAsync(x => x.Id == id);
+            var entidad = await _repository.GetById(id);
             if (entidad == null)
             {
                 return NotFound();
             }
 
-            var dto = mapper.Map<DepartamentoDTO>(entidad);
+            var dto = _mapper.getDTO(entidad);
 
             return Ok(new Response<DepartamentoDTO>(dto));
         }
@@ -67,10 +64,10 @@ namespace DepartamentosMunicipiosAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DepartamentoCreationDTO departamentoCreationDTO)
         {
-            var entidad = mapper.Map<Departamento>(departamentoCreationDTO);
-            context.Add(entidad);
-            await context.SaveChangesAsync();
-            var dto = mapper.Map<DepartamentoDTO>(entidad);
+            var entidad = _mapper.getEntity(departamentoCreationDTO);
+            await _repository.Insert(entidad);
+
+            var dto = _mapper.getDTO(entidad);
             var response = new Response<DepartamentoDTO>(dto);
             return new CreatedAtRouteResult("getDepartamento", new { id = entidad.Id }, response);
         }
@@ -78,23 +75,21 @@ namespace DepartamentosMunicipiosAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, [FromBody] DepartamentoCreationDTO departamentoCreationDTO)
         {
-            var entidad = mapper.Map<Departamento>(departamentoCreationDTO);
+            var entidad = _mapper.getEntity(departamentoCreationDTO);
             entidad.Id = id;
-            context.Entry(entidad).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            await _repository.Update(entidad);
             return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var exists = await context.Departamentos.AnyAsync(x => x.Id == id);
-            if (!exists)
+            var exists = await _repository.GetById(id);
+            if (exists != null)
             {
                 return NotFound();
             }
-            context.Remove(new Departamento() { Id = id });
-            await context.SaveChangesAsync();
+            await _repository.Delete(id);
             return NoContent();
         }
     }

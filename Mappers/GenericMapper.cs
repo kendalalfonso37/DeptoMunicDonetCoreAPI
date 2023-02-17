@@ -4,7 +4,7 @@ using DepartamentosMunicipiosAPI.Entities;
 
 namespace DepartamentosMunicipiosAPI.Mappers
 {
-    public class GenericMapper<TEntity, TEntityDTO> where TEntity: Entity where TEntityDTO : EntityDTO 
+    public class GenericMapper<TEntity, TEntityDTO>:IGenericMapper<TEntity, TEntityDTO> where TEntity: Entity where TEntityDTO : EntityDTO 
     {
         private readonly IMapper _mapper;
         public GenericMapper(IMapper mapper)

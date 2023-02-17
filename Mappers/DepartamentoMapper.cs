@@ -5,13 +5,13 @@ using System.Diagnostics;
 
 namespace DepartamentosMunicipiosAPI.Mappers
 {
-    public class DepartamentoMapper
+    public class DepartamentoMapper : IDepartamentoMapper
     {
 
         private readonly IMapper _mapper;
         public DepartamentoMapper(IMapper mapper)
         {
-            _mapper = mapper;
+            this._mapper = mapper;
         }
 
         public DepartamentoDTO getDTO(Departamento entity)
@@ -24,7 +24,7 @@ namespace DepartamentosMunicipiosAPI.Mappers
             return _mapper.Map<List<DepartamentoDTO>>(entities);
         }
 
-        public Departamento getEntity(DepartamentoDTO dto)
+        public Departamento getEntity(DepartamentoCreationDTO dto)
         {
             return _mapper.Map<Departamento>(dto);
         }

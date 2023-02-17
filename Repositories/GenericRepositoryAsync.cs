@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DepartamentosMunicipiosAPI.Repositories
 {
-    public class GenericRepositoryAsync<T> where T : class
+    public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : class
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -36,7 +36,7 @@ namespace DepartamentosMunicipiosAPI.Repositories
 
         }
 
-        public async Task<int> Delete(int id) 
+        public async Task<int> Delete(int id)
         {
             var exists = GetById(id);
             if (exists != null)
