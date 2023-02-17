@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DepartamentosMunicipiosAPI.Repositories
 {
-    public class DepartamentoRepository : IDepartamentoRepository
+    public class MunicipioRepository : IMunicipioRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly DbSet<Departamento> _dbSet;
-        public DepartamentoRepository(ApplicationDbContext context)
+        private readonly DbSet<Municipio> _dbSet;
+
+        public MunicipioRepository(ApplicationDbContext context) 
         {
             this._context = context;
-            this._dbSet = context.Set<Departamento>();
+            this._dbSet = context.Set<Municipio>();
         }
-
         public async Task<int> Count()
         {
             return await _dbSet.CountAsync();
@@ -22,7 +22,7 @@ namespace DepartamentosMunicipiosAPI.Repositories
         public async Task<int> Delete(int id)
         {
             var exists = await GetById(id);
-            if (exists != null)
+            if (exists == null)
             {
                 return 0;
             }
@@ -30,28 +30,28 @@ namespace DepartamentosMunicipiosAPI.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Departamento>> GetAllAsync()
+        public async Task<List<Municipio>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<Departamento> GetById(int id)
+        public async Task<Municipio> GetById(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<List<Departamento>> GetPagedList(int skip, int take)
+        public async Task<List<Municipio>> GetPagedList(int skip, int take)
         {
             return await _dbSet.Skip(skip).Take(take).ToListAsync();
         }
 
-        public async Task<int> Insert(Departamento entity)
+        public async Task<int> Insert(Municipio entity)
         {
             _context.Add(entity);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Update(Departamento entity)
+        public async Task<int> Update(Municipio entity)
         {
             var exists = await GetById(entity.Id);
             if (exists == null)

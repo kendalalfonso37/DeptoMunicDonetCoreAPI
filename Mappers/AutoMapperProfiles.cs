@@ -10,6 +10,8 @@ namespace DepartamentosMunicipiosAPI.Mappers
         {
             CreateMap<Departamento, DepartamentoDTO>().ReverseMap();
             CreateMap<DepartamentoCreationDTO, Departamento>();
+            CreateMap<Municipio, MunicipioDTO>().ReverseMap();
+            CreateMap<MunicipioCreationDTO, Municipio>();
 
         }
     }

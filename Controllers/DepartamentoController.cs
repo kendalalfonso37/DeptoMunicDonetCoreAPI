@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
-using DepartamentosMunicipiosAPI.DatabaseContexts;
 using DepartamentosMunicipiosAPI.DTOs;
-using DepartamentosMunicipiosAPI.Entities;
 using DepartamentosMunicipiosAPI.Filters;
 using DepartamentosMunicipiosAPI.Helpers;
 using DepartamentosMunicipiosAPI.Mappers;
 using DepartamentosMunicipiosAPI.Repositories;
 using DepartamentosMunicipiosAPI.Services;
 using DepartamentosMunicipiosAPI.Wrappers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace DepartamentosMunicipiosAPI.Controllers
 {
