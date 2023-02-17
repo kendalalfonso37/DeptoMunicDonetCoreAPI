@@ -41,6 +41,7 @@ namespace DepartamentosMunicipiosAPI
             });
             // Add Repositories
             services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
+            services.AddScoped<IMunicipioRepository, MunicipioRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
