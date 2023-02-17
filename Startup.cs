@@ -1,4 +1,6 @@
-﻿using DepartamentosMunicipiosAPI.Services;
+﻿using DepartamentosMunicipiosAPI.DatabaseContexts;
+using DepartamentosMunicipiosAPI.Helpers;
+using DepartamentosMunicipiosAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -25,12 +27,12 @@ namespace DepartamentosMunicipiosAPI
 
             // Get Base URL
             services.AddHttpContextAccessor();
-            services.AddSingleton<IUriService>(o =>
+            services.AddSingleton<IUriServiceHelper>(o =>
             {
                 var accessor = o.GetRequiredService<IHttpContextAccessor>();
                 var request = accessor.HttpContext.Request;
                 var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
-                return new UriService(uri);
+                return new UriServiceHelper(uri);
             });
         }
 

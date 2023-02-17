@@ -2,7 +2,7 @@
 using DepartamentosMunicipiosAPI.DTOs;
 using DepartamentosMunicipiosAPI.Entities;
 
-namespace DepartamentosMunicipiosAPI.Helpers
+namespace DepartamentosMunicipiosAPI.Mappers
 {
     public class AutoMapperProfiles : Profile
     {

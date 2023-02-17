@@ -2,7 +2,7 @@
 
 namespace DepartamentosMunicipiosAPI.Services
 {
-    public interface IUriService
+    public interface IUriServiceHelper
     {
         public Uri GetPageUri(PaginationFilter filter, string route);
     }

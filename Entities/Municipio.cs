@@ -2,9 +2,8 @@
 
 namespace DepartamentosMunicipiosAPI.Entities
 {
-    public class Municipio
+    public class Municipio : Entity
     {
-        public int Id { get; set; }
         [Required]
         [StringLength(80)]
         public string Nombre { get; set; }

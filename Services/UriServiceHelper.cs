@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace DepartamentosMunicipiosAPI.Services
 {
-    public class UriService : IUriService
+    public class UriServiceHelper : IUriServiceHelper
     {
         private readonly string _baseUri;
 
-        public UriService(string baseUri) 
+        public UriServiceHelper(string baseUri)
         {
             _baseUri = baseUri;
         }

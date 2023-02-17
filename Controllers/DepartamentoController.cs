@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DepartamentosMunicipiosAPI.DatabaseContexts;
 using DepartamentosMunicipiosAPI.DTOs;
 using DepartamentosMunicipiosAPI.Entities;
 using DepartamentosMunicipiosAPI.Filters;
@@ -18,9 +19,9 @@ namespace DepartamentosMunicipiosAPI.Controllers
     {
         private readonly IMapper mapper;
         private readonly ApplicationDbContext context;
-        private readonly IUriService uriService;
+        private readonly IUriServiceHelper uriService;
 
-        public DepartamentoController(ApplicationDbContext context, IMapper mapper, IUriService uriService)
+        public DepartamentoController(ApplicationDbContext context, IMapper mapper, IUriServiceHelper uriService)
         {
             this.mapper = mapper;
             this.context = context;
@@ -33,7 +34,7 @@ namespace DepartamentosMunicipiosAPI.Controllers
             var route = Request.Path.Value;
             var validFilter = new PaginationFilter(paginationFilter.PageNumber, paginationFilter.PageSize);
 
-            var pagedData = await context.Departamentos.Skip( (validFilter.PageNumber - 1) * validFilter.PageSize )
+            var pagedData = await context.Departamentos.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                 .Take(validFilter.PageSize)
                 .ToListAsync();
 
@@ -41,7 +42,7 @@ namespace DepartamentosMunicipiosAPI.Controllers
 
             var dtos = mapper.Map<List<DepartamentoDTO>>(pagedData);
 
-            var pagedResponse = PaginationHelper.CreatePagedResponse(dtos, validFilter,totalRecords,uriService,route);
+            var pagedResponse = PaginationHelper.CreatePagedResponse(dtos, validFilter, totalRecords, uriService, route);
 
             return Ok(pagedResponse);
 

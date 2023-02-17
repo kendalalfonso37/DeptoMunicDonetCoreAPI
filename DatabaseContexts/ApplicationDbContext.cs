@@ -1,13 +1,13 @@
 ﻿using DepartamentosMunicipiosAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DepartamentosMunicipiosAPI
+namespace DepartamentosMunicipiosAPI.DatabaseContexts
 {
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            
+
         }
 
         // Add Entities
